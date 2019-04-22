@@ -1,0 +1,68 @@
+include "global.tbh"
+
+'====================================================================
+function callback_agg_get_firmware_version() as string
+	callback_agg_get_firmware_version=FIRMWARE_VERSION
+end function
+
+sub callback_agg_pre_buffrq(required_buff_pages as byte)
+	
+end sub
+
+sub callback_agg_buff_released()
+	
+end sub
+
+sub callback_agg_error(failure_code as en_agg_status_codes, byref error_item as string)
+	
+end sub
+
+function callback_agg_device_function(byref function_name as string ,byref context_name as string, byref function_input as string, byref function_output as string) as ok_ng
+	
+end function
+
+sub callback_agg_synchronized()
+	
+end sub
+
+function callback_agg_convert_setting(byref setting_name as string, index as byte, byref setting_value as string, op as en_agg_rdwr) as ok_ng
+	select case setting_name
+	case "DR":
+		'value is converted to show in AggreGate server
+		if op=EN_AGG_GET then
+			setting_value=str(val(setting_value))
+		end if
+	end select
+end function
+
+sub callback_stg_error(byref stg_name_or_num as string,index as byte,status as en_stg_status_codes)
+	
+end sub
+
+sub callback_stg_pre_get(byref stg_name_or_num as string,index as byte,byref stg_value as string)
+	
+end sub
+
+sub callback_stg_post_set(byref stg_name_or_num as string, index as byte,byref stg_value as string)
+	
+end sub
+
+function callback_agg_external_data_source(byref source_type as string, byref parameter1 as string, byref parameter2 as string, byref parameter3 as string, rw as en_agg_rdwr)as ok_ng
+	
+end function
+
+function callback_agg_external_data_modtime_sg(byref source_type as string, byref item_name as string, byref date_time as string, op as en_agg_rdwr) as ok_ng
+	
+end function
+
+function callback_agg_setting_saved(byref setting_name as string,index as byte, byref setting_val as string) as en_stg_status_codes
+	
+end function
+
+sub callback_agg_setting_error(byref setting_name as string, error_code as en_stg_status_codes)
+	
+end sub
+
+sub callback_agg_firmware_upload_progress(total_size as dword, remain_size as dword)
+	
+end sub

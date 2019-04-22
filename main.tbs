@@ -1,0 +1,82 @@
+include "global.tbh"
+
+'====================================================================
+sub on_sys_init()
+
+	ser.rxbuffrq(1)
+	ser.txbuffrq(1)
+	sys.buffalloc()
+
+
+	ser.baudrate=ser.div9600/4 ' -> 38400 baud
+	ser.bits=PL_SER_BB_8
+	ser.parity=PL_SER_PR_NONE
+	ser.flowcontrol=PL_SER_FC_DISABLED
+	ser.interface=PL_SER_SI_FULLDUPLEX
+	ser.esctype=PL_SER_ET_DISABLED
+	ser.interchardelay=0
+	ser.enabled=YES
+
+	dim i as word
+	dim stg_name as string(4)	
+	net.ip=IP_ADDRESS
+	
+	sock.rxbuffrq(4)
+	sock.txbuffrq(4)
+	sys.buffalloc
+	
+	if stg_start()<>EN_STG_STATUS_OK then
+		sys.halt
+	end if
+
+	if stg_check_all(stg_name)<>EN_STG_STATUS_OK then
+		stg_restore_multiple(EN_STG_INIT_MODE_OVERRIDE)
+		sys.reboot()
+	end if
+	
+	'provide a 5-second opportunity to initialize settings
+	pat.play("RG~",PL_PAT_CANINT)
+	i=sys.timercount
+	while sys.timercount-i<10
+		if button.pressed=YES then
+			pat.play("-~",PL_PAT_CANINT)
+			if stg_restore_multiple(EN_STG_INIT_MODE_NORMAL)<>EN_STG_STATUS_OK then
+				sys.halt
+			end if
+			pat.play("G~",PL_PAT_CANINT)
+lbl1:		goto lbl1 'expecting the device to be rebooted
+		end if
+	wend
+
+	if agg_start(PL_SOCK_INTERFACE_NET,"admin","Test-server","admin",AGG_IP_ADDRESS,6480,600,YES)<>EN_AGG_STATUS_OK then
+		sys.halt
+	end if
+
+	pat.play("G-G----~",PL_PAT_CANINT)
+end sub
+
+sub on_sys_timer()
+	agg_proc_timer()
+end sub
+
+sub on_sock_data_arrival()
+	agg_proc_data()
+end sub
+
+sub on_sock_event(newstate as enum pl_sock_state, newstatesimple as enum pl_sock_state_simple)
+	agg_proc_sock_event(newstate,newstatesimple)
+end sub
+
+sub on_ser_data_arrival()
+
+	dim x as string
+	
+	x=ser.getdata(2)
+	
+	'set and store recieved variable in settings
+	stg_set("DR", 0,x )
+	
+	sys.debugprint(x+chr(13)+chr(10))
+	
+	
+end sub

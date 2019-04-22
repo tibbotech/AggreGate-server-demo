@@ -1,0 +1,8 @@
+>>BR	E	B	1	0	13	A	0	Baudrate
+>>DR	E	S	1	0	200	A	0	Data Readings
+#define STG_DESCRIPTOR_FILE "settings.xtxt"
+#define STG_TIMESTAMP 1
+#define STG_MAX_NUM_SETTINGS 2
+#define STG_RAM_ARRAY_SIZE 0
+#define STG_MAX_SETTING_NAME_LEN 2
+#define STG_MAX_SETTING_VALUE_LEN 200

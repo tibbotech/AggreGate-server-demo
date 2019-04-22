@@ -1,0 +1,21 @@
+'DEFINES-------------------------------------------------------------
+Const FIRMWARE_VERSION="{AGG_TEST_DEVICE V1.00}"
+Const IP_ADDRESS="192.168.1.115"		'<---- change as needed
+Const AGG_IP_ADDRESS="192.168.1.43"		'<---- change as needed
+
+
+'INCLUDES------------------------------------------------------------
+
+includepp "settings.xtxt"
+include "settings\trunk\settings.tbh"
+
+
+includepp "aggregate.xtxt"
+include "aggregate\trunk\aggregate.tbh"
+
+
+include "sock\trunk\sock.tbh"
+include "time\trunk\time.tbh"
+
+
+'DECLARATIONS--------------------------------------------------------
